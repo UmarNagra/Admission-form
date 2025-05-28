@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>University Admission Form</title>
     <link rel="stylesheet" href="style.css">
-
 </head>
 <body>
-    <div class="container">
+    <!-- Main Form Container -->
+    <div class="container" id="mainContainer">
         <!-- Header -->
         <div class="header">
-            <h1>🎓 Agriculture University Admission</h1>
+            <h1>🎓 University Admission</h1>
             <p>Begin Your Academic Journey with Excellence</p>
         </div>
 
@@ -232,17 +233,6 @@
                         </div>
                     </div>
 
-                    <!-- Success Message -->
-                    <div class="success-message" id="successMessage">
-                        <div class="success-icon"></div>
-                        <h2 class="success-title">Application Submitted!</h2>
-                        <p class="success-description">Thank you! Your admission application has been received.</p>
-                        <p class="success-details">We'll contact you within 2-3 business days.</p>
-                        <div class="success-highlight">
-                            <p>🎓 Welcome to your academic journey!</p>
-                        </div>
-                    </div>
-
                     <!-- Navigation -->
                     <div class="navigation" id="navigation">
                         <button type="button" class="btn btn-secondary" id="prevBtn" disabled>
@@ -253,6 +243,19 @@
                         </button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Message Container -->
+    <div class="success-container" id="successContainer">
+        <div class="success-card">
+            <div class="success-icon"></div>
+            <h2 class="success-title">Application Submitted!</h2>
+            <p class="success-description" id="successText">Thank you! Your admission application has been received.</p>
+            <p class="success-details" id="contactDetails">We'll contact you within 2-3 business days.</p>
+            <div class="success-highlight">
+                <p>🎓 Welcome to your academic journey!</p>
             </div>
         </div>
     </div>
@@ -340,6 +343,8 @@
         const courseSelect = document.getElementById('course');
         const previousDegreeSelect = document.getElementById('previousDegree');
         const universityGroup = document.getElementById('universityGroup');
+        const mainContainer = document.getElementById('mainContainer');
+        const successContainer = document.getElementById('successContainer');
 
         // Initialize form
         document.addEventListener('DOMContentLoaded', function() {
@@ -639,6 +644,8 @@
         async function submitForm() {
             if (!validateStep(3)) return;
 
+            const data = collectFormData();
+            
             isLoading = true;
             nextBtn.innerHTML = '<div class="loading-spinner"></div> Submitting...';
             nextBtn.disabled = true;
@@ -646,10 +653,16 @@
             // Simulate form submission
             await new Promise(resolve => setTimeout(resolve, 2000));
 
-            // Hide form and show success message
-            form.style.display = 'none';
-            document.getElementById('navigation').style.display = 'none';
-            document.getElementById('successMessage').style.display = 'block';
+            // Update success message with user data
+            const successText = document.getElementById('successText');
+            const contactDetails = document.getElementById('contactDetails');
+            
+            successText.textContent = `Thank you, ${data.fullName}! Your admission application has been received.`;
+            contactDetails.textContent = `We'll contact you at ${data.email} within 2-3 business days.`;
+
+            // Hide main container and show success message
+            mainContainer.style.display = 'none';
+            successContainer.classList.add('active');
 
             isLoading = false;
         }
